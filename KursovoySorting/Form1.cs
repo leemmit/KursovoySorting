@@ -18,9 +18,9 @@ namespace KursovoySorting
 
         private void ClearOutput()
         {
-
             rtb_output.Clear();
             rtb_output.Visible = false;
+            tb_input.Clear();
         }
 
         public Form1()
@@ -39,7 +39,7 @@ namespace KursovoySorting
             rtb_output.BackColor = Color.White;
             rtb_output.BorderStyle = BorderStyle.Fixed3D;
 
-            
+            btn_copy.Visible = false;
         }
 
         private void menu_select_Click(object sender, EventArgs e)
@@ -51,6 +51,7 @@ namespace KursovoySorting
             lb_input.Visible = true;
             tb_input.Visible = true;
             btn_sort.Visible = true;
+            btn_copy.Visible = false;
 
             switch (clickedItem.Name)
             {
@@ -70,49 +71,93 @@ namespace KursovoySorting
             whichSort = lb_sortname.Text;
         }
 
-        private void btn_sort_Click(object sender, EventArgs e)
+        private void toParse(string str)
         {
-            rtb_output.Visible = true;
+            if (double.TryParse(str, out double number))
+            {
+                double.Parse(str);
+            }
+            else
+            {
+                notifyIcon.ShowBalloonTip(2000);
+            }
+        }
 
+        private void btn_sort_Click(object sender, EventArgs e) 
+        {
             char[] delimiters = new char[] { ',', ' ' };
             string inputString = tb_input.Text;
             string[] inputArr = inputString.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
 
-            for (int i = 0; i < inputArr.Length; i++) { inputArr[i] = inputArr[i].Replace('.', ','); }
-
-            //for (int i = 0; i < inputArr.Length - 1; i++) { inputDoubled[i] = Double.Parse(inputArr[i]); }
-            //foreach (string item in inputArr) { inputDoubled.Append(Double.Parse(item)); }
-            double[] inputDoubled = Array.ConvertAll(inputArr, s => double.Parse(s));
-            for (int i = 0; i < inputArr.Length; i++) { inputArr[i] = inputArr[i].Replace('.', ','); }
-
-            switch (whichSort)
+            if (inputArr.Length == 0)
             {
-                case "Сортировка выбором":
-                    SelectionSort.Sort(inputDoubled);
-                    break;
-                case "Сортировка вставками":
-                    InsertionSort.Sort(inputDoubled);
-                    break;
-                case "Сортировка слиянием":
-                    MergeSort.Sort(inputDoubled);
-                    break;
-                case "Сортировка\nпирамидальным деревом":
-                    HeapSort.Sort(inputDoubled);
-                    break;
-                default:
-                    break;
+                notifyIcon.BalloonTipTitle = "Значения введены некорректно";
+                notifyIcon.BalloonTipText = "Пожалуйста, проверьте правильность ввода и попробуйте еще раз";
+                notifyIcon.ShowBalloonTip(2000);
             }
-
-            for (int i = 0; i < inputDoubled.Length-1; i++)
+            else
             {
-                rtb_output.AppendText(inputDoubled[i].ToString().Replace(',', '.') + ", ");
+                bool ifNotify = false;
+
+                for (int i = 0; i < inputArr.Length; i++) { inputArr[i] = inputArr[i].Replace('.', ','); }
+                double[] inputDoubled = Array.ConvertAll(inputArr, s =>
+                {
+                    if (double.TryParse(s, out double number))
+                    {
+                        return number;
+                    }
+                    else
+                    {
+                        notifyIcon.BalloonTipTitle = "Значения введены некорректно";
+                        notifyIcon.BalloonTipText = "Пожалуйста, проверьте правильность ввода и попробуйте еще раз";
+                        notifyIcon.ShowBalloonTip(2000);
+                        ifNotify = true;
+                        return 0;
+                    }
+                });
+
+                if (!ifNotify)
+                {
+                    rtb_output.Visible = true;
+                    btn_copy.Visible = true;
+                    rtb_output.Clear();
+
+                    for (int i = 0; i < inputArr.Length; i++) { inputArr[i] = inputArr[i].Replace('.', ','); }
+
+                    switch (whichSort)
+                    {
+                        case "Сортировка выбором":
+                            SelectionSort.Sort(inputDoubled);
+                            break;
+                        case "Сортировка вставками":
+                            InsertionSort.Sort(inputDoubled);
+                            break;
+                        case "Сортировка слиянием":
+                            MergeSort.Sort(inputDoubled);
+                            break;
+                        case "Сортировка\nпирамидальным деревом":
+                            HeapSort.Sort(inputDoubled);
+                            break;
+                        default:
+                            break;
+                    }
+
+                    for (int i = 0; i < inputDoubled.Length - 1; i++)
+                    {
+                        rtb_output.AppendText(inputDoubled[i].ToString().Replace(',', '.') + ", ");
+                    }
+                    rtb_output.AppendText(inputDoubled[inputDoubled.Length - 1].ToString().Replace(',', '.'));
+                }
             }
-            rtb_output.AppendText(inputDoubled[inputDoubled.Length-1].ToString().Replace(',', '.'));
         }
 
         private void btn_copy_Click(object sender, EventArgs e)
         {
             Clipboard.SetText(rtb_output.Text);
+
+            notifyIcon.BalloonTipTitle = "Уведомление";
+            notifyIcon.BalloonTipText = "Текст успешно скопирован!";
+            notifyIcon.ShowBalloonTip(3000);
         }
     }
 }

@@ -29,6 +29,8 @@ namespace KursovoySorting
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.leftMenu = new System.Windows.Forms.MenuStrip();
             this.selection_sort = new System.Windows.Forms.ToolStripMenuItem();
             this.insertion_sort = new System.Windows.Forms.ToolStripMenuItem();
@@ -41,6 +43,7 @@ namespace KursovoySorting
             this.btn_sort = new System.Windows.Forms.Button();
             this.rtb_output = new System.Windows.Forms.RichTextBox();
             this.btn_copy = new System.Windows.Forms.Button();
+            this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.leftMenu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -172,6 +175,13 @@ namespace KursovoySorting
             this.btn_copy.UseVisualStyleBackColor = true;
             this.btn_copy.Click += new System.EventHandler(this.btn_copy_Click);
             // 
+            // notifyIcon
+            // 
+            this.notifyIcon.BalloonTipTitle = "Текст скопирован";
+            this.notifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon.Icon")));
+            this.notifyIcon.Text = "Текст скопирован";
+            this.notifyIcon.Visible = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -210,6 +220,7 @@ namespace KursovoySorting
         private System.Windows.Forms.Button btn_sort;
         private System.Windows.Forms.RichTextBox rtb_output;
         private System.Windows.Forms.Button btn_copy;
+        private System.Windows.Forms.NotifyIcon notifyIcon;
     }
 }
 
