@@ -44,6 +44,9 @@ namespace KursovoySorting
             this.rtb_output = new System.Windows.Forms.RichTextBox();
             this.btn_copy = new System.Windows.Forms.Button();
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
+            this.lb_input2 = new System.Windows.Forms.Label();
+            this.rtb_time = new System.Windows.Forms.RichTextBox();
+            this.lb_time = new System.Windows.Forms.Label();
             this.leftMenu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -60,7 +63,7 @@ namespace KursovoySorting
             this.leftMenu.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Table;
             this.leftMenu.Location = new System.Drawing.Point(0, 0);
             this.leftMenu.Name = "leftMenu";
-            this.leftMenu.Size = new System.Drawing.Size(353, 709);
+            this.leftMenu.Size = new System.Drawing.Size(356, 709);
             this.leftMenu.TabIndex = 0;
             this.leftMenu.Text = "menuStrip1";
             // 
@@ -111,11 +114,11 @@ namespace KursovoySorting
             // lb_sortname
             // 
             this.lb_sortname.AutoSize = true;
-            this.lb_sortname.Font = new System.Drawing.Font("Sans Serif Collection", 14F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lb_sortname.Font = new System.Drawing.Font("Sans Serif Collection", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lb_sortname.Location = new System.Drawing.Point(387, 9);
             this.lb_sortname.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lb_sortname.Name = "lb_sortname";
-            this.lb_sortname.Size = new System.Drawing.Size(442, 68);
+            this.lb_sortname.Size = new System.Drawing.Size(375, 59);
             this.lb_sortname.TabIndex = 4;
             this.lb_sortname.Text = "Метод сортировки";
             this.lb_sortname.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -123,15 +126,15 @@ namespace KursovoySorting
             // lb_input
             // 
             this.lb_input.AutoSize = true;
-            this.lb_input.Font = new System.Drawing.Font("Sans Serif Collection", 9.749999F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lb_input.Font = new System.Drawing.Font("Sans Serif Collection", 8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lb_input.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.lb_input.Location = new System.Drawing.Point(390, 154);
+            this.lb_input.Location = new System.Drawing.Point(392, 138);
             this.lb_input.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lb_input.Name = "lb_input";
-            this.lb_input.Size = new System.Drawing.Size(475, 49);
+            this.lb_input.Size = new System.Drawing.Size(419, 39);
             this.lb_input.TabIndex = 5;
             this.lb_input.Text = "Введите массив для сортировки:";
-            this.lb_input.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lb_input.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // tb_input
             // 
@@ -141,6 +144,7 @@ namespace KursovoySorting
             this.tb_input.Name = "tb_input";
             this.tb_input.Size = new System.Drawing.Size(654, 55);
             this.tb_input.TabIndex = 6;
+            this.tb_input.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tb_input_KeyDown);
             // 
             // btn_sort
             // 
@@ -167,7 +171,7 @@ namespace KursovoySorting
             this.btn_copy.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.btn_copy.Image = global::KursovoySorting.Properties.Resources.icons8_copy_24;
             this.btn_copy.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btn_copy.Location = new System.Drawing.Point(629, 527);
+            this.btn_copy.Location = new System.Drawing.Point(853, 527);
             this.btn_copy.Name = "btn_copy";
             this.btn_copy.Size = new System.Drawing.Size(200, 53);
             this.btn_copy.TabIndex = 10;
@@ -182,11 +186,47 @@ namespace KursovoySorting
             this.notifyIcon.Text = "Текст скопирован";
             this.notifyIcon.Visible = true;
             // 
+            // lb_input2
+            // 
+            this.lb_input2.AutoSize = true;
+            this.lb_input2.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.lb_input2.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.lb_input2.Location = new System.Drawing.Point(397, 174);
+            this.lb_input2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lb_input2.Name = "lb_input2";
+            this.lb_input2.Size = new System.Drawing.Size(519, 29);
+            this.lb_input2.TabIndex = 11;
+            this.lb_input2.Text = "(Можно использовать разделители \" \" и/или \",\")";
+            this.lb_input2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // rtb_time
+            // 
+            this.rtb_time.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.rtb_time.Location = new System.Drawing.Point(635, 541);
+            this.rtb_time.Name = "rtb_time";
+            this.rtb_time.Size = new System.Drawing.Size(148, 39);
+            this.rtb_time.TabIndex = 12;
+            this.rtb_time.Text = "";
+            // 
+            // lb_time
+            // 
+            this.lb_time.AutoSize = true;
+            this.lb_time.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Italic);
+            this.lb_time.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.lb_time.Location = new System.Drawing.Point(395, 541);
+            this.lb_time.Name = "lb_time";
+            this.lb_time.Size = new System.Drawing.Size(211, 29);
+            this.lb_time.TabIndex = 13;
+            this.lb_time.Text = "Время сортировки:";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1116, 709);
+            this.Controls.Add(this.lb_time);
+            this.Controls.Add(this.rtb_time);
+            this.Controls.Add(this.lb_input2);
             this.Controls.Add(this.btn_copy);
             this.Controls.Add(this.rtb_output);
             this.Controls.Add(this.btn_sort);
@@ -221,6 +261,9 @@ namespace KursovoySorting
         private System.Windows.Forms.RichTextBox rtb_output;
         private System.Windows.Forms.Button btn_copy;
         private System.Windows.Forms.NotifyIcon notifyIcon;
+        private System.Windows.Forms.Label lb_input2;
+        private System.Windows.Forms.RichTextBox rtb_time;
+        private System.Windows.Forms.Label lb_time;
     }
 }
 

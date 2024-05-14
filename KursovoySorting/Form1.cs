@@ -21,6 +21,7 @@ namespace KursovoySorting
             rtb_output.Clear();
             rtb_output.Visible = false;
             tb_input.Clear();
+            rtb_time.Clear();
         }
 
         public Form1()
@@ -28,8 +29,12 @@ namespace KursovoySorting
             InitializeComponent();
             lb_sortname.Visible = false;
             lb_input.Visible = false;
+            lb_input2.Visible = false;
             tb_input.Visible = false;
             btn_sort.Visible = false;
+
+            lb_time.Visible = false;
+            rtb_time.Visible = false;
 
             rtb_output.Visible = false;
             rtb_output.ReadOnly = true;
@@ -49,6 +54,7 @@ namespace KursovoySorting
             lb_intro.Visible = false;
             lb_sortname.Visible = true;
             lb_input.Visible = true;
+            lb_input2.Visible = true;
             tb_input.Visible = true;
             btn_sort.Visible = true;
             btn_copy.Visible = false;
@@ -69,18 +75,6 @@ namespace KursovoySorting
                     break;
             }
             whichSort = lb_sortname.Text;
-        }
-
-        private void toParse(string str)
-        {
-            if (double.TryParse(str, out double number))
-            {
-                double.Parse(str);
-            }
-            else
-            {
-                notifyIcon.ShowBalloonTip(2000);
-            }
         }
 
         private void btn_sort_Click(object sender, EventArgs e) 
@@ -121,9 +115,15 @@ namespace KursovoySorting
                     rtb_output.Visible = true;
                     btn_copy.Visible = true;
                     rtb_output.Clear();
+                    rtb_time.Clear();
+                    lb_time.Visible = true;
+                    rtb_time.Visible = true;
+
+                    System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
 
                     for (int i = 0; i < inputArr.Length; i++) { inputArr[i] = inputArr[i].Replace('.', ','); }
 
+                    stopwatch.Start();
                     switch (whichSort)
                     {
                         case "Сортировка выбором":
@@ -141,6 +141,9 @@ namespace KursovoySorting
                         default:
                             break;
                     }
+                    stopwatch.Stop();
+
+                    rtb_time.AppendText(stopwatch.ElapsedTicks.ToString() + " тиков");
 
                     for (int i = 0; i < inputDoubled.Length - 1; i++)
                     {
@@ -158,6 +161,14 @@ namespace KursovoySorting
             notifyIcon.BalloonTipTitle = "Уведомление";
             notifyIcon.BalloonTipText = "Текст успешно скопирован!";
             notifyIcon.ShowBalloonTip(3000);
+        }
+
+        private void tb_input_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                btn_sort_Click(sender, e);
+            }
         }
     }
 }
