@@ -8,56 +8,65 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-using KursovoySorting.Sorting;
+using KursovoySorting.arrayOperations;
+using KursovoySorting.output;
+using KursovoySorting.buttons;
 
 namespace KursovoySorting
 {
     public partial class Form1 : Form
     {
-        private string whichSort = "";
+        private static string whichSort = "";
+        public static string WhichSort { get => whichSort; set => whichSort = value; }
+        private static bool ifNotify;
+        public static bool IfNotify { get => ifNotify; set => ifNotify = value; }
 
-        private void ClearOutput()
-        {
-            rtb_output.Clear();
-            rtb_output.Visible = false;
-            tb_input.Clear();
-            rtb_time.Clear();
-        }
+
+        static RichTextBox richTbOutput;
+        static RichTextBox richTbTime;
+        static TextBox _textboxInput;
+        static Button copyButton;
+        static Button sortButton;
+
+        static Label labelTime;
+        //static Label labelCopy;
+        static Label labelInput;
+        static Label labelInput2;
+        static Label labelSortname;
+        static Label labelIntro;
+        static NotifyIcon _notifyIcon;
+        public static RichTextBox RichTextBoxOutput { get => richTbOutput; set => richTbOutput = value; }
+        public static RichTextBox RichTextBoxTime { get => richTbTime; set => richTbTime = value; }
+        public static Button ButtonCopy { get => copyButton; set => copyButton = value; }
+        public static Button ButtonSort { get => sortButton; set => sortButton = value; }
+        public static Label LabelInput { get => labelInput; set => labelInput = value; }
+        public static Label LabelInput2 { get => labelInput2; set => labelInput2 = value; }
+        public static Label LabelTime { get => labelTime; set => labelTime = value; }
+        public static Label LabelSortname { get => labelSortname; set => labelSortname = value; }
+        public static Label LabelIntro { get => labelIntro; set => labelIntro = value; }
+        //public static Label LabelCopy { get => labelCopy; set => labelCopy = value; }
+
+        public static NotifyIcon NotifyIcon { get => _notifyIcon; set => _notifyIcon = value; }
+        public static TextBox TextBoxInput { get => _textboxInput; set => _textboxInput = value; }
+
+
+
 
         public Form1()
         {
             InitializeComponent();
-            lb_sortname.Visible = false;
-            lb_input.Visible = false;
-            lb_input2.Visible = false;
-            tb_input.Visible = false;
-            btn_sort.Visible = false;
-
-            lb_time.Visible = false;
-            rtb_time.Visible = false;
-
-            rtb_output.Visible = false;
-            rtb_output.ReadOnly = true;
-            rtb_output.TabStop = false;
-            rtb_output.Multiline = true;
-            rtb_output.ScrollBars = RichTextBoxScrollBars.Both;
-            rtb_output.BackColor = Color.White;
-            rtb_output.BorderStyle = BorderStyle.Fixed3D;
-
-            btn_copy.Visible = false;
+            InitVariables();
+            Init.InitElements();
         }
+
+
 
         private void menu_select_Click(object sender, EventArgs e)
         {
-            ClearOutput();
+            Clearing.clearOutput();
+            Init.InitMenu();
+
             ToolStripMenuItem clickedItem = sender as ToolStripMenuItem;
-            lb_intro.Visible = false;
-            lb_sortname.Visible = true;
-            lb_input.Visible = true;
-            lb_input2.Visible = true;
-            tb_input.Visible = true;
-            btn_sort.Visible = true;
-            btn_copy.Visible = false;
 
             switch (clickedItem.Name)
             {
@@ -79,96 +88,33 @@ namespace KursovoySorting
 
         private void btn_sort_Click(object sender, EventArgs e) 
         {
-            char[] delimiters = new char[] { ',', ' ' };
-            string inputString = tb_input.Text;
-            string[] inputArr = inputString.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
-
-            if (inputArr.Length == 0)
-            {
-                notifyIcon.BalloonTipTitle = "Значения введены некорректно";
-                notifyIcon.BalloonTipText = "Пожалуйста, проверьте правильность ввода и попробуйте еще раз";
-                notifyIcon.ShowBalloonTip(2000);
-            }
-            else
-            {
-                bool ifNotify = false;
-
-                for (int i = 0; i < inputArr.Length; i++) { inputArr[i] = inputArr[i].Replace('.', ','); }
-                double[] inputDoubled = Array.ConvertAll(inputArr, s =>
-                {
-                    if (double.TryParse(s, out double number))
-                    {
-                        return number;
-                    }
-                    else
-                    {
-                        notifyIcon.BalloonTipTitle = "Значения введены некорректно";
-                        notifyIcon.BalloonTipText = "Пожалуйста, проверьте правильность ввода и попробуйте еще раз";
-                        notifyIcon.ShowBalloonTip(2000);
-                        ifNotify = true;
-                        return 0;
-                    }
-                });
-
-                if (!ifNotify)
-                {
-                    rtb_output.Visible = true;
-                    btn_copy.Visible = true;
-                    rtb_output.Clear();
-                    rtb_time.Clear();
-                    lb_time.Visible = true;
-                    rtb_time.Visible = true;
-
-                    System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
-
-                    for (int i = 0; i < inputArr.Length; i++) { inputArr[i] = inputArr[i].Replace('.', ','); }
-
-                    stopwatch.Start();
-                    switch (whichSort)
-                    {
-                        case "Сортировка выбором":
-                            SelectionSort.Sort(inputDoubled);
-                            break;
-                        case "Сортировка вставками":
-                            InsertionSort.Sort(inputDoubled);
-                            break;
-                        case "Сортировка слиянием":
-                            MergeSort.Sort(inputDoubled);
-                            break;
-                        case "Сортировка\nпирамидальным деревом":
-                            HeapSort.Sort(inputDoubled);
-                            break;
-                        default:
-                            break;
-                    }
-                    stopwatch.Stop();
-
-                    rtb_time.AppendText(stopwatch.ElapsedTicks.ToString() + " тиков");
-
-                    for (int i = 0; i < inputDoubled.Length - 1; i++)
-                    {
-                        rtb_output.AppendText(inputDoubled[i].ToString().Replace(',', '.') + ", ");
-                    }
-                    rtb_output.AppendText(inputDoubled[inputDoubled.Length - 1].ToString().Replace(',', '.'));
-                }
-            }
+            Buttons.btnSortClick();
         }
-
         private void btn_copy_Click(object sender, EventArgs e)
         {
-            Clipboard.SetText(rtb_output.Text);
-
-            notifyIcon.BalloonTipTitle = "Уведомление";
-            notifyIcon.BalloonTipText = "Текст успешно скопирован!";
-            notifyIcon.ShowBalloonTip(3000);
+            Buttons.btnCopyClick();
         }
-
         private void tb_input_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter)
-            {
-                btn_sort_Click(sender, e);
-            }
+            Buttons.tbInputKeydown(e);
+        }
+
+        void InitVariables()
+        {
+            richTbOutput = rtb_output;
+            richTbTime = rtb_time;
+            _textboxInput = tb_input;
+
+            copyButton = btn_copy;
+            sortButton = btn_sort;
+
+            labelTime = lb_time;
+            labelInput = lb_input;
+            labelInput2 = lb_input2;
+            labelSortname = lb_sortname;
+            labelIntro = lb_intro;
+
+            _notifyIcon = notifyIcon;
         }
     }
 }
