@@ -54,7 +54,7 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="output\ClearOutput.cs" />
+    <Compile Include="output\Clearing.cs" />
     <Compile Include="output\Init.cs" />
     <Compile Include="output\Notification.cs" />
     <Compile Include="output\Output.cs" />
